@@ -263,7 +263,7 @@ const Products = () => {
           onClick={handleBasketClick}
         >
           <div
-            className="absolute right-0 top-0 w-1/3 h-full bg-white p-6 overflow-y-auto"
+            className="absolute right-0 top-0 w-2/3 h-full bg-white p-6 overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-bold text-[#002855] mb-4">
