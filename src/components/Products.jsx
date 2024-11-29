@@ -3,10 +3,9 @@ import { IoIosStar, IoIosStarHalf, IoIosStarOutline } from "react-icons/io";
 import { BiBasket } from "react-icons/bi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "../assets/marketplace_logo.png"; 
+import logo from "../assets/marketplace_logo.png";
 import { useNavigate } from "react-router-dom";
 import Carausel from "./Carausel";
-
 
 const API_URL = "https://fakestoreapi.com";
 
@@ -18,11 +17,11 @@ const Products = () => {
   const [error, setError] = useState("");
   const [basket, setBasket] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [isBasketOpen, setIsBasketOpen] = useState(false); 
+  const [isBasketOpen, setIsBasketOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleBasketClick = () => {
-    setIsBasketOpen(!isBasketOpen); 
+    setIsBasketOpen(!isBasketOpen);
   };
 
   const fetchCategories = async () => {
@@ -77,6 +76,15 @@ const Products = () => {
     fetchProducts();
   }, [selectedCategory]);
 
+  // ** Katta o'zgarish: Basket o'zgarganida totalPrice yangilanadi
+  useEffect(() => {
+    const total = basket.reduce(
+      (sum, product) => sum + product.price * product.quantity,
+      0
+    );
+    setTotalPrice(total);
+  }, [basket]);
+
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -95,31 +103,33 @@ const Products = () => {
   };
 
   const addToBasket = (productId) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
-    );
+    const productToAdd = products.find((product) => product.id === productId);
 
-    setBasket((prevBasket) => {
-      const existingProduct = prevBasket.find((item) => item.id === productId);
-      if (existingProduct) {
-        return prevBasket.map((item) =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+    if (productToAdd) {
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === productId
+            ? { ...product, quantity: product.quantity + 1 }
+            : product
+        )
+      );
+
+      setBasket((prevBasket) => {
+        const existingProduct = prevBasket.find(
+          (item) => item.id === productId
         );
-      }
-      const productToAdd = products.find((product) => product.id === productId);
-      return [...prevBasket, { ...productToAdd, quantity: 1 }];
-    });
-
-    updateTotalPrice(); 
+        if (existingProduct) {
+          return prevBasket.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
+        return [...prevBasket, { ...productToAdd, quantity: 1 }];
+      });
+    }
+    toast.success("Product added to basket!");
   };
-
-
 
   const removeFromBasket = (productId) => {
     setProducts((prevProducts) =>
@@ -141,19 +151,8 @@ const Products = () => {
       return updatedBasket;
     });
 
-    updateTotalPrice(); 
     toast.info("Product removed from basket!");
   };
-
-  const updateTotalPrice = () => {
-    const total = basket.reduce(
-      (sum, product) => sum + product.price * product.quantity,
-      0
-    );
-    setTotalPrice(total);
-  };
-
-
 
   return (
     <div className="container mx-auto px-4 py-8 bg-white border-[#023e7d] border-2">
@@ -180,7 +179,7 @@ const Products = () => {
           </button>
         </div>
       </div>
-      <Carausel/>
+      <Carausel />
       {loading && <p className="text-[#023e7d]">Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
       <div className="mb-6">
