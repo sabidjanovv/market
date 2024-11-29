@@ -1,5 +1,8 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import image1 from "../assets/image1.jpg";
+import image2 from "../assets/image2.jpg";
+import image3 from "../assets/image3.jpg";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -21,15 +24,9 @@ const Carausel = () => {
         <div className="h-[400px] md:h-[600px] lg:h-[800px] border relative">
           <img
             className="w-full h-full object-cover absolute top-0 left-0"
-            src="https://images.uzum.uz/ct034tdpq3ggq63emjq0/main_page_banner.jpg"
+            src={image1}
             alt="Banner 1"
           />
-          <div className="relative p-4 text-white">
-            <h2 className="text-sm md:text-lg lg:text-2xl font-bold bg-black bg-opacity-50 p-2 rounded">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos,
-              officia!
-            </h2>
-          </div>
         </div>
       </SwiperSlide>
 
@@ -37,7 +34,7 @@ const Carausel = () => {
         <div className="h-[400px] md:h-[600px] lg:h-[800px] border relative">
           <img
             className="w-full h-full object-cover absolute top-0 left-0"
-            src="https://images.uzum.uz/ct034ctpq3ggq63emjk0/main_page_banner.jpg"
+            src={image2}
             alt="Banner 2"
           />
         </div>
@@ -47,7 +44,7 @@ const Carausel = () => {
         <div className="h-[400px] md:h-[600px] lg:h-[800px] border relative">
           <img
             className="w-full h-full object-cover absolute top-0 left-0"
-            src="https://images.uzum.uz/ct2ue9tpq3gujfcfe950/main_page_banner.jpg"
+            src={image3}
             alt="Banner 3"
           />
         </div>
