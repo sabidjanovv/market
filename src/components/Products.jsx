@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/marketplace_logo.png"; 
 import { useNavigate } from "react-router-dom";
+import Carausel from "./Carausel";
+
 
 const API_URL = "https://fakestoreapi.com";
 
@@ -178,10 +180,9 @@ const Products = () => {
           </button>
         </div>
       </div>
-
+      <Carausel/>
       {loading && <p className="text-[#023e7d]">Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
-
       <div className="mb-6">
         <p className="block text-lg font-medium text-[#002855] mb-2">
           Choose category:
@@ -202,7 +203,6 @@ const Products = () => {
           ))}
         </div>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((product) => (
           <div
@@ -256,7 +256,6 @@ const Products = () => {
           </div>
         ))}
       </div>
-
       {isBasketOpen && (
         <div
           className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 transition-[.5s]"
