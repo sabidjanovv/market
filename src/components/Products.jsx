@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/marketplace_logo.png";
 import { useNavigate } from "react-router-dom";
 import Carausel from "./Carausel";
+import {} from "number-brm";
 
 const API_URL = "https://fakestoreapi.com";
 
@@ -154,6 +155,20 @@ const Products = () => {
     toast.info("Product removed from basket!");
   };
 
+  const handleOrder = () => {
+    if (basket.length === 0) {
+      toast.error("Your basket is empty!");
+      return;
+    }
+    console.log("Order placed:", basket);
+    setBasket([]);
+    setProducts((prevProducts) =>
+      prevProducts.map((product) => ({ ...product, quantity: 0 }))
+    );
+    setTotalPrice(0);
+    toast.success("Order placed successfully!");
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 bg-white border-[#023e7d] border-2">
       <div className="flex items-center justify-between p-6 mb-6 bg-[#c0fdff] border-[#023e7d] border-[1px]">
@@ -289,8 +304,15 @@ const Products = () => {
                     </span>
                   </div>
                 ))}
-                <div className="mt-4 text-lg font-bold">
-                  Total: ${totalPrice}
+                <div className="mt-4 text-lg font-bold flex items-center justify-between">
+                  <p>Total: ${totalPrice.brm("int", 2)}</p>
+
+                  <button
+                    onClick={handleOrder}
+                    className="bg-[#0466c8] text-white px-6 py-2 rounded-lg hover:bg-[#0353a4]"
+                  >
+                    Place Order
+                  </button>
                 </div>
               </div>
             )}
