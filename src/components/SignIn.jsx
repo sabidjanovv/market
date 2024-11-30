@@ -31,7 +31,7 @@ const SignIn = ({ toggle }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 border rounded-lg"
-          placeholder="name@company.com"
+          placeholder="youremailname@gmail.com"
           required
         />
       </div>

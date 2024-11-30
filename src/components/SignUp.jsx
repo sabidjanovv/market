@@ -58,7 +58,7 @@ const SignUp = ({ toggle }) => {
           value={formData.email}
           onChange={handleChange}
           className="w-full p-2 border rounded-lg"
-          placeholder="name@company.com"
+          placeholder="youremailname@gmail.com"
           required
         />
       </div>
