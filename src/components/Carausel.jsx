@@ -20,7 +20,7 @@ const Carausel = () => {
         disableOnInteraction: false,
       }}
       modules={[Autoplay, Navigation]}
-      className="container mx-auto mySwiper select-none"
+      className="container mx-auto mySwiper select-none z-0"
     >
       <SwiperSlide>
         <div className="h-[400px] md:h-[600px] lg:h-[800px] border relative">

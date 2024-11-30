@@ -6,9 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/marketplace_logo.png";
 import { useNavigate } from "react-router-dom";
 import Carausel from "./Carausel";
-import {} from "number-brm";
-import Modal from "./Modal";
-// import ImageView from "./ImageView";
+import ImageView from "./ImageView";
+import { format } from "number-brm"; // Added this to format price correctly
 
 const API_URL = "https://fakestoreapi.com";
 
@@ -21,8 +20,7 @@ const Products = () => {
   const [basket, setBasket] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isBasketOpen, setIsBasketOpen] = useState(false);
-  const [modalData, setModalData] = useState(null);
-  console.log(modalData);
+  const [modalData, setModalData] = useState(null); // To store product details for modal
 
   const navigate = useNavigate();
 
@@ -173,6 +171,11 @@ const Products = () => {
     toast.success("Order placed successfully!");
   };
 
+  // Modal opening on product image click
+  const handleImageClick = (product) => {
+    setModalData(product);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 bg-white border-[#023e7d] border-2">
       <div className="flex items-center justify-between p-6 mb-6 bg-[#c0fdff] border-[#023e7d] border-[1px]">
@@ -221,117 +224,59 @@ const Products = () => {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="border rounded-lg shadow-lg p-5 flex flex-col justify-between hover:shadow-2xl transition-shadow"
-          >
+          <div key={product.id} className="border p-4 rounded-lg">
             <img
-              onClick={() => setModalData(product)}
               src={product.image}
               alt={product.title}
-              className="w-full h-40 object-contain mb-4"
+              className="w-full h-64 object-cover cursor-pointer"
+              onClick={() => handleImageClick(product)} // Show details on click
             />
-            <h2 className="text-lg font-bold text-[#002855] mb-2">
+            <h3 className="mt-4 text-xl font-semibold text-[#023e7d]">
               {product.title}
-            </h2>
-            <p className="text-[#0353a4] text-lg font-bold">${product.price}</p>
-            <div className="flex justify-between items-center mt-4">
-              <div className="flex items-center">
-                {renderStars(product.rating.rate)}
-                <span className="text-sm text-gray-500 ml-2">
-                  ({product.rating.count})
-                </span>
-              </div>
+            </h3>
+            <p className="mt-2 text-sm text-[#0466c8]">
+              {format(product.price)} UZS
+            </p>
+            <div className="flex items-center mt-2">
+              {renderStars(product.rating.rate)}
             </div>
-            <div className="mt-4">
-              {product.quantity === 0 ? (
-                <button
-                  onClick={() => addToBasket(product.id)}
-                  className="bg-[#0466c8] text-white p-2 rounded-lg hover:bg-[#0353a4] flex items-center justify-center w-full"
-                >
-                  <BiBasket className="mr-2" />
-                  Add to basket
-                </button>
-              ) : (
-                <div className="flex justify-between items-center">
-                  <button
-                    onClick={() => removeFromBasket(product.id)}
-                    className="bg-[#33415c] text-white px-4 py-2 rounded-lg hover:bg-[#5c677d]"
-                  >
-                    -
-                  </button>
-                  <span className="text-xl font-bold">{product.quantity}</span>
-                  <button
-                    onClick={() => addToBasket(product.id)}
-                    className="bg-[#33415c] text-white px-4 py-2 rounded-lg hover:bg-[#5c677d]"
-                  >
-                    +
-                  </button>
-                </div>
-              )}
-            </div>
+            <button
+              onClick={() => addToBasket(product.id)}
+              className="mt-4 w-full py-2 bg-[#0466c8] text-white rounded-lg hover:bg-[#0353a4]"
+            >
+              Add to Basket
+            </button>
           </div>
         ))}
       </div>
-      {isBasketOpen && (
-        <div
-          className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 transition-[.5s]"
-          onClick={handleBasketClick}
-        >
-          <div
-            className="absolute right-0 top-0 w-1/3 h-full bg-white p-6 overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-bold text-[#002855] mb-4">
-              Your Basket
-            </h2>
-            {basket.length === 0 ? (
-              <p>Your basket is empty</p>
-            ) : (
-              <div>
-                {basket.map((product) => (
-                  <div
-                    key={product.id}
-                    className="flex justify-between items-center mb-4"
-                  >
-                    <div className="flex items-center">
-                      <img
-                        src={product.image}
-                        alt={product.title}
-                        className="w-12 h-12 object-contain mr-4"
-                      />
-                      <span>{product.title}</span>
-                    </div>
-                    <span>
-                      {product.quantity} x ${product.price}
-                    </span>
-                  </div>
-                ))}
-                <div className="mt-4 text-lg font-bold flex items-center justify-between">
-                  <p>Total: ${totalPrice.brm("int", 2)}</p>
-
-                  <button
-                    onClick={handleOrder}
-                    className="bg-[#0466c8] text-white px-6 py-2 rounded-lg hover:bg-[#0353a4]"
-                  >
-                    Place Order
-                  </button>
-                </div>
-              </div>
-            )}
+      {modalData && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h2 className="text-2xl font-semibold mb-4">{modalData.title}</h2>
+            <p className="text-lg text-[#0466c8] mb-4">
+              {format(modalData.price)} UZS
+            </p>
+            <p className="mb-4">{modalData.description}</p>
+            <div className="flex gap-4">
+              {modalData.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Product image ${index + 1}`}
+                  className="w-24 h-24 object-cover"
+                />
+              ))}
+            </div>
+            <button
+              onClick={() => setModalData(null)}
+              className="mt-4 w-full py-2 bg-[#0466c8] text-white rounded-lg hover:bg-[#0353a4]"
+            >
+              Close
+            </button>
           </div>
         </div>
-      )}
-      {modalData && (
-        <Modal close={() => setModalData(null)}>
-          <div className="bg-white">
-            <img src={modalData?.image} alt="" />
-            <h2 className="text-[#0466c8]">{modalData.title}</h2>
-            <p>{modalData.description}</p>
-          </div>
-        </Modal>
       )}
     </div>
   );
